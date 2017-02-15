@@ -1,5 +1,7 @@
 var path = require('path');
-var app = require('./app');
+var appModule = require('./app');
+var app = appModule.app;
+var auth = appModule.auth;
 var webpack = require('webpack');
 var config = require('./webpack.config.dev');
 
@@ -18,18 +20,18 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 var assignments = {};
 
-app.post("/state.json", function(req, res) {
+app.post("/state.json", auth, function(req, res) {
   console.log("recieved", req.body)
   assignments = req.body
   res.end("OK")
 });
 
-app.get("/state.json", function(req, res) {
+app.get("/state.json", auth, function(req, res) {
   console.log("replying", assignments)
   res.end(JSON.stringify(assignments))
 });
 
-app.get('*', function(req, res) {
+app.get('*', auth, function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 

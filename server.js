@@ -1,17 +1,19 @@
 var path = require('path');
 var express = require('express');
-var app = require('./app');
+var appModule = require('./app');
+var app = appModule.app;
+var auth = appModule.auth;
 var http = require('http').Server(app);
 
-app.get('/', function (req, res) {
+app.get('/', auth, function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/edit', function (req, res) {
+app.get('/edit', auth, function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/static/bundle.js', function (req, res) {
+app.get('/static/bundle.js', auth, function (req, res) {
   res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
 });
 
